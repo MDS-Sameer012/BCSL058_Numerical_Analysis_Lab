@@ -37,7 +37,7 @@ double regulaFalsiMethod(double &low,double &high,double tolerance ,int iteratio
 int main(int argc, char const *argv[])
 {
     double low=1 ;
-    double high=2;
+    double high=2; 
     double tolerance = 0.00001;
     double iteration =0;
     double maxIteration=1000;
