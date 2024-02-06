@@ -1,20 +1,20 @@
 #include <iostream>
 #include <cmath>
-#include <iomanip>
 
 using namespace std;
 
-double equation(double x)
+double f(double x)
 {
-    return ((pow(x, 2)) + (2 * x) - 3);
+    return (pow(x, 2) - x - 20);
 }
 
-double bisectionMethod(double &low, double &high, double tolerance, int &iteration)
+double bisectionMethod(double &low, double &high, double tolerance, int &iteration, int maxIteration)
 {
-    // checking if given interval is correct
-    if (equation(low) * equation(high) > 0)
+
+    // checking if given interval is correct or not
+    if (f(low) * f(high) > 0)
     {
-        cerr << "Invalid Interval , The endpoint of interval should return opposite sign for f(x)" << endl;
+        cerr << "Invalid Interval , The value of f(x) should be of opposite sign for both endpoints"<<endl<<endl;
         return NAN;
     }
 
@@ -22,44 +22,55 @@ double bisectionMethod(double &low, double &high, double tolerance, int &iterati
 
     do
     {
+        printf("Iteration : %d \t low : %lf \t high : %lf \t x : %lf \t f(x) : %lf\n", iteration, low, high, x, f(x));
+
         iteration++;
+
         x = (low + high) / 2;
 
-        printf("Iteration : %d \t Low : %.2f \t High : %.2f \t x : %.2f \t f(x) : %.2f \n", iteration, low, high, x, equation(x));
-
-        if ((equation(x) == 0) || (fabs(high - low) < tolerance))
+        if (f(x) == 0 || (fabs(f(x)) < tolerance) || iteration >= maxIteration)
         {
             return x;
         }
-        else if (equation(x) < 0)
+        else if (f(x) > 0)
         {
-            low = x;
+            high = x;
         }
         else
         {
-            high = x;
+            low = x;
         }
     } while (true);
 }
 
-int main()
+int main(int argc, char const *argv[])
 {
-
-    double low = 0;
-    double high = 3;
-    double tolerance = 0.01;
+    double low = 4.0;
+    double high = 5.0;
+    double tolerance = 0.0001;
     int iteration = 0;
+    int maxIteration = 1000;
 
-    double root = bisectionMethod(low, high, tolerance, iteration);
-
-    cout << "*******************************************" << endl
-         << endl;
-    cout << "FINAL RESULT" << endl;
     cout << endl
-         << "Number of Iteration : " << iteration << endl;
-    cout << "low : " <<fixed<<setprecision(2)<< low << endl;
-    cout << "high : " <<fixed<<setprecision(2)<< high << endl;
-    cout << "x(root) : " <<fixed<<setprecision(2)<< root << endl;
-
+         << "\t\t\t\t\t BISECTION METHOD \t\t\t" << endl
+         << endl;
+    double root = bisectionMethod(low, high, tolerance, iteration, maxIteration);
+    if (isnan(root))
+    {
+        cout << "Please Enter/Update Correct value of high and low" << endl;
+    }
+    else
+    {
+        cout << endl
+             << "*********************************************************************************************************************" << endl;
+        cout << "FINAL VALUES" << endl
+             << endl;
+        ;
+        cout << "Number of Iterations : " << iteration << endl;
+        cout << "Low : " << low << endl;
+        cout << "high : " << high << endl;
+        cout << "Root(x) : " << root << endl;
+        cout << "f(x) : " << f(root) << endl;
+    }
     return 0;
 }
